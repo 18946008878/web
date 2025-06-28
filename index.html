@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极简团队记账 - 应用介绍</title>
+    <link rel="icon" href="/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+            color: #222;
+        }
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 56px;
+            background: rgba(38,208,206,0.93);
+            box-shadow: 0 2px 12px rgba(38,208,206,0.13);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            padding: 0 2.5vw;
+            backdrop-filter: blur(6px);
+        }
+        .nav-logo {
+            display: flex; align-items: center; font-weight: 700; font-size: 1.1rem; color: #fff;
+        }
+        .nav-logo img { width: 32px; height: 32px; margin-right: 0.5rem; }
+        .nav-links { list-style: none; display: flex; gap: 1.2rem; margin: 0; padding: 0; }
+        .nav-link { color: #fff; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .nav-link:hover { color: #1a2980; }
+        .theme-toggle {
+            background: none; border: none; font-size: 1.3rem; cursor: pointer; margin-left: 1.2rem; color: #fff;
+        }
+        header {
+            background: linear-gradient(120deg, #1a2980 60%, #26d0ce 100%);
+            color: #fff;
+            padding: 2.5rem 1rem 2rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .logo-circle {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #fff 60%, #26d0ce 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem auto;
+            box-shadow: 0 4px 24px rgba(45,140,240,0.12);
+            animation: popin 1s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        .logo-circle img {
+            width: 48px;
+            height: 48px;
+        }
+        @keyframes popin {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.7rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-shadow: 0 2px 12px rgba(45,140,240,0.08);
+            animation: fadein 1.2s 0.2s both;
+        }
+        @keyframes fadein {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: none; }
+        }
+        header p {
+            margin: 0;
+            font-size: 1.25rem;
+            opacity: 0.95;
+            animation: fadein 1.2s 0.4s both;
+        }
+        main {
+            max-width: 950px;
+            margin: 2.5rem auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 32px rgba(45,140,240,0.08);
+            padding: 2.5rem 3rem 2.2rem 3rem;
+            position: relative;
+        }
+        section {
+            margin-bottom: 2.7rem;
+            position: relative;
+        }
+        section:not(:first-child)::before {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #2d8cf0 60%, #5ad8a6 100%);
+            border-radius: 2px;
+            margin: 0 0 1.2rem 0;
+        }
+        h2 {
+            color: #1a2980;
+            margin-top: 0;
+            font-size: 1.45rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        ul, ol {
+            margin: 0.5rem 0 0.5rem 1.5rem;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.2rem;
+        }
+        .feature-item {
+            position: relative;
+            min-height: 180px;
+            border-radius: 28px;
+            background: linear-gradient(120deg, #e0eafc 60%, #cfdef3 100%);
+            box-shadow: 0 0 32px 0 #26d0ce33, 0 0 0 2px #1a298044;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            cursor: pointer;
+            padding: 2.2rem 2rem 1.7rem 2rem;
+            overflow: hidden;
+            border: none;
+            transition: box-shadow 0.18s, transform 0.18s, background 0.18s;
+        }
+        .feature-item:hover {
+            box-shadow: 0 0 64px 0 #26d0cecc, 0 0 0 4px #1a298099;
+            background: linear-gradient(120deg, #cfdef3 60%, #e0eafc 100%);
+            transform: scale(1.03);
+        }
+        .feature-fg {
+            position: static;
+            width: 100%;
+            padding: 0;
+            background: none;
+            color: #1a2980;
+            border-radius: 0;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .feature-icon {
+            font-size: 2.3rem;
+            margin-bottom: 1.1rem;
+            color: #26d0ce;
+            text-shadow: 0 0 16px #26d0ce33, 0 0 32px #1a298044;
+        }
+        .feature-item strong {
+            font-size: 1.22rem;
+            color: #1a2980;
+            margin-bottom: 0.5rem;
+            display: block;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 12px #cfdef3cc, 0 2px 12px #fff8;
+        }
+        .feature-item p {
+            margin: 0;
+            font-size: 1.08rem;
+            color: #222;
+            text-shadow: 0 2px 8px #fff8;
+        }
+        @media (max-width: 900px) {
+            .feature-list { grid-template-columns: 1fr; gap: 1.2rem; }
+            .feature-item { min-width: 0; }
+        }
+        @media (max-width: 600px) {
+            .feature-list { grid-template-columns: 1fr; gap: 1rem; }
+            .feature-item { padding: 1.2rem 1rem; }
+        }
+        body.dark {
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            color: #e6e6e6;
+        }
+        body.dark main { background: #232526; }
+        body.dark .info-module {
+            background: rgba(35,37,38,0.98);
+            box-shadow: 0 2px 16px rgba(38,208,206,0.10);
+        }
+        body.dark .info-module:hover {
+            background: rgba(35,37,38,1);
+            box-shadow: 0 8px 36px rgba(38,208,206,0.18), 0 1.5px 8px rgba(26,41,128,0.10);
+        }
+        body.dark .info-module h2 { color: #26d0ce; }
+        body.dark .feature-item {
+            background: linear-gradient(120deg, #232526 60%, #26d0ce 100%);
+            color: #e6e6e6;
+            box-shadow: 0 0 32px 0 #26d0ce33, 0 0 0 2px #1a298044;
+        }
+        body.dark .feature-item strong { color: #26d0ce; }
+        body.dark .feature-icon { color: #26d0ce; }
+        body.dark .feature-item p { color: #e6e6e6; }
+        .footer {
+            text-align: center;
+            color: #b0c4d8;
+            font-size: 1.05rem;
+            margin: 2.5rem 0 1.2rem 0;
+            letter-spacing: 1px;
+        }
+        /* 按钮样式 */
+        .main-btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #26d0ce 0%, #1a2980 100%);
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            padding: 0.7rem 2.2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 1.2rem 0 0 0;
+            box-shadow: 0 2px 16px rgba(38,208,206,0.18);
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .main-btn:hover {
+            background: linear-gradient(90deg, #1a2980 0%, #26d0ce 100%);
+            box-shadow: 0 6px 32px rgba(38,208,206,0.25);
+        }
+        /* 主按钮outline */
+        .main-btn-outline {
+            background: #fff !important;
+            color: #1a2980 !important;
+            border: 2px solid #26d0ce;
+        }
+        .main-btn-outline:hover {
+            background: #e6f7ff !important;
+            color: #26d0ce !important;
+        }
+        @media (max-width: 900px) {
+            main { padding: 1.2rem 0.5rem; }
+        }
+        @media (max-width: 600px) {
+            main { padding: 0.5rem 0.1rem; }
+            .feature-list { flex-direction: column; }
+            .feature-item { min-width: 0; }
+            header h1 { font-size: 2rem; }
+        }
+        /* 弹窗 */
+        .modal-bg {
+            display: none;
+            position: fixed; left:0; top:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.25);
+            z-index: 200;
+        }
+        .modal {
+            display: none;
+            position: fixed; left:50%; top:50%; transform:translate(-50%,-50%);
+            background: linear-gradient(135deg, #fff 60%, #26d0ce 100%);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(45,140,240,0.18);
+            min-width: 260px; max-width: 90vw; width: 350px;
+            z-index: 201;
+            padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+            animation: popin 0.3s;
+        }
+        .modal-content { font-size: 1.08rem; color: #222; }
+        .modal-close {
+            position: absolute; right: 1rem; top: 0.7rem;
+            font-size: 1.5rem; color: #26d0ce; cursor: pointer;
+        }
+        /* 深色主题 */
+        body.dark {
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            color: #e6e6e6;
+        }
+        body.dark main { background: #232526; }
+        body.dark .info-module {
+            background: rgba(35,37,38,0.98);
+            box-shadow: 0 2px 16px rgba(38,208,206,0.10);
+        }
+        body.dark .info-module:hover {
+            background: rgba(35,37,38,1);
+            box-shadow: 0 8px 36px rgba(38,208,206,0.18), 0 1.5px 8px rgba(26,41,128,0.10);
+        }
+        body.dark .info-module h2 { color: #26d0ce; }
+        body.dark .feature-item {
+            background: linear-gradient(120deg, #232526 60%, #26d0ce 100%);
+            color: #e6e6e6;
+            box-shadow: 0 0 32px 0 #26d0ce33, 0 0 0 2px #1a298044;
+        }
+        body.dark .feature-item strong { color: #26d0ce; }
+        body.dark .feature-icon { color: #26d0ce; }
+        body.dark .feature-item p { color: #e6e6e6; }
+        .info-module {
+            background: rgba(255,255,255,0.92);
+            border-radius: 20px;
+            box-shadow: 0 2px 16px rgba(38,208,206,0.08);
+            margin-bottom: 2.5rem;
+            padding: 2.2rem 2rem 1.5rem 2rem;
+            position: relative;
+            transition: box-shadow 0.2s, background 0.2s;
+        }
+        .info-module:hover {
+            box-shadow: 0 8px 36px rgba(38,208,206,0.16), 0 1.5px 8px rgba(26,41,128,0.10);
+            background: rgba(255,255,255,0.98);
+        }
+        .info-module h2 {
+            margin-top: 0;
+            font-size: 1.35rem;
+            color: #1a2980;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+        .module-content {
+            margin-top: 1.1rem;
+        }
+        body.dark .info-module {
+            background: rgba(24,28,35,0.92);
+            box-shadow: 0 2px 16px rgba(38,208,206,0.10);
+        }
+        body.dark .info-module:hover {
+            background: rgba(24,28,35,0.99);
+            box-shadow: 0 8px 36px rgba(38,208,206,0.18), 0 1.5px 8px rgba(26,41,128,0.10);
+        }
+        body.dark .info-module h2 { color: #26d0ce; }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-logo">
+            <img src="favicon.png" alt="logo">
+            <span>极简团队记账</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#定位" class="nav-link">定位</a></li>
+            <li><a href="#功能" class="nav-link">功能</a></li>
+            <li><a href="#设计" class="nav-link">设计</a></li>
+            <li><a href="#技术" class="nav-link">技术</a></li>
+            <li><a href="#扩展" class="nav-link">扩展</a></li>
+            <li><a href="#contact" class="nav-link">联系我们</a></li>
+        </ul>
+        <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
+    </nav>
+    <header>
+        <div class="logo-circle">
+            <img src="favicon.png" alt="logo">
+        </div>
+        <h1>极简团队记账</h1>
+        <p>为导游/团队等多人场景设计的极简记账工具，支持本地与云端同步，数据安全、操作便捷。</p>
+        <a href="index2.html" class="main-btn" id="tryBtn" style="margin-top:1.5rem;">立即体验</a>
+        <a href="#contact" class="main-btn main-btn-outline" style="margin-left:1rem;">联系我们</a>
+        <a href="https://www.pgyer.com/zsxH3oKQ" target="_blank" class="main-btn main-btn-outline">下载App</a>
+    </header>
+    <main>
+        <section id="定位" class="info-module">
+            <h2>产品定位与核心价值</h2>
+            <div class="module-content">
+                <ul>
+                    <li>专为导游、团队领队、旅行社等多人协作记账场景设计</li>
+                    <li>本地与云端双向同步，数据安全可靠</li>
+                    <li>移动端与Web端均可流畅使用</li>
+                </ul>
+            </div>
+        </section>
+        <section id="功能" class="info-module">
+            <h2>主要功能模块</h2>
+            <div class="module-content">
+                <div class="feature-list">
+                    <div class="feature-item" data-detail="行程管理：行程列表分页展示，支持新建、编辑、批量删除与本地/云端同步。">
+                        <div class="feature-fg">
+                            <span class="feature-icon">📅</span>
+                            <strong>行程管理</strong>
+                            <p>行程列表分页展示，支持新建、编辑、批量删除与本地/云端同步。</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" data-detail="行程详情：展示单个行程下所有收支记录，支持筛选、统计与明细管理。">
+                        <div class="feature-fg">
+                            <span class="feature-icon">📖</span>
+                            <strong>行程详情</strong>
+                            <p>展示单个行程下所有收支记录，支持筛选、统计与明细管理。</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" data-detail="收支记录管理：多类型/分类收支，金额自动分摊，支持备注、支付方式等扩展。">
+                        <div class="feature-fg">
+                            <span class="feature-icon">💰</span>
+                            <strong>收支记录管理</strong>
+                            <p>多类型/分类收支，金额自动分摊，支持备注、支付方式等扩展。</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" data-detail="数据同步与备份：自动同步Supabase云端，支持CSV备份/恢复与冲突检测。">
+                        <div class="feature-fg">
+                            <span class="feature-icon">☁️</span>
+                            <strong>数据同步与备份</strong>
+                            <p>自动同步云端，支持CSV备份/恢复与冲突检测。</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" data-detail="用户认证：Supabase邮箱注册/登录，Web与移动端统一认证。">
+                        <div class="feature-fg">
+                            <span class="feature-icon">👤</span>
+                            <strong>用户认证</strong>
+                            <p>邮箱注册/登录，Web与移动端统一认证。</p>
+                        </div>
+                    </div>
+                    <div class="feature-item" data-detail="自动更新：集成蒲公英API自动检测新版本，弹窗提示与下载跳转。">
+                        <div class="feature-fg">
+                            <span class="feature-icon">🔔</span>
+                            <strong>自动更新</strong>
+                            <p>集成自动检测新版本，弹窗提示与下载跳转。</p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+        <section id="设计" class="info-module">
+            <h2>UI/UX设计结构</h2>
+            <div class="module-content">
+                <ul>
+                    <li>底部导航栏：行程（首页）、我的</li>
+                    <li>页面层级：行程列表 → 行程详情 → 收支编辑/新增</li>
+                    <li>弹窗/对话框：登录/注册、数据管理、更新提示、删除确认等</li>
+                    <li>所有关键操作均有反馈，数据同步与异常有提示</li>
+                </ul>
+            </div>
+        </section>
+        <section id="技术" class="info-module">
+            <h2>核心技术与逻辑</h2>
+            <div class="module-content">
+                <ul>
+                    <li>本地存储：移动端，Web端</li>
+                    <li>云端后端：</li>
+                    <li>数据自动同步，支持离线降级与冲突合并</li>
+                    <li>CSV格式导入导出，兼容Excel</li>
+                    <li>自动更新检测，集成API</li>
+                </ul>
+            </div>
+        </section>
+        <section id="扩展" class="info-module">
+            <h2>可扩展性与维护建议</h2>
+            <div class="module-content">
+                <ul>
+                    <li>代码结构清晰，数据模型、Provider、UI分层明确</li>
+                    <li>支持多端（Web/Android/），后端可扩展为多租户</li>
+                    <li>可扩展更多统计、报表、团队协作等高级功能</li>
+                    <li>UI风格现代，易于二次开发和品牌定制</li>
+                </ul>
+            </div>
+        </section>
+        <section id="contact" class="info-module">
+            <h2>联系我们</h2>
+            <div class="module-content">
+                <strong>邮箱：</strong><a href="182048694@qq.com">182048694@qq.com</a><br>
+                <strong>微信公众号：</strong>小凡平凡<br>
+                <strong>官网：</strong><a href="https://yourapp.com" target="_blank">yourapp.com</a>
+            </div>
+        </section>
+    </main>
+    <button id="toTopBtn" title="回到顶部">↑</button>
+    <div class="footer">
+        &copy; <span id="year"></span> 小凡平凡 | 应用介绍网站
+    </div>
+    <!-- 弹窗 -->
+    <div class="modal-bg" id="modalBg"></div>
+    <div class="modal" id="modal">
+        <span class="modal-close" id="modalClose">×</span>
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+    <script>
+    // 平滑锚点跳转
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if(href.startsWith('#')) {
+                e.preventDefault();
+                document.querySelector(href).scrollIntoView({behavior:'smooth'});
+            }
+        });
+    });
+    // 功能卡片弹窗（更科技感动画）
+    document.querySelectorAll('.feature-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const detail = this.getAttribute('data-detail');
+            showModal('<div style="font-size:1.25rem;font-weight:700;color:#26d0ce;margin-bottom:0.7rem;">'+this.querySelector('strong').textContent+'</div><div style="font-size:1.08rem;">'+detail+'</div>');
+        });
+        item.addEventListener('mousemove', function(e) {
+            this.style.background = `linear-gradient(135deg, #fff 60%, #26d0ce ${(e.offsetX/this.offsetWidth)*100}% )`;
+        });
+        item.addEventListener('mouseleave', function() {
+            this.style.background = 'linear-gradient(135deg, #fff 60%, #26d0ce 100%)';
+        });
+    });
+    // 立即体验按钮跳转index2.html
+    var tryBtn = document.getElementById('tryBtn');
+    if (tryBtn) {
+        tryBtn.onclick = null;
+        tryBtn.removeAttribute('onclick');
+    }
+    // 滚动到顶部按钮
+    const toTopBtn = document.getElementById('toTopBtn');
+    window.onscroll = function() {
+        toTopBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+    };
+    toTopBtn.onclick = function() {
+        window.scrollTo({top:0,behavior:'smooth'});
+    };
+    // 页脚年份自动更新
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // 主题切换
+    const themeToggle = document.getElementById('themeToggle');
+    let dark = false;
+    themeToggle.onclick = function() {
+        dark = !dark;
+        document.body.classList.toggle('dark', dark);
+        themeToggle.textContent = dark ? '☀️' : '🌙';
+    };
+    // 弹窗逻辑
+    function showModal(content) {
+        const modal = document.getElementById('modal');
+        document.getElementById('modalContent').innerHTML = content;
+        document.getElementById('modalBg').style.display = 'block';
+        modal.style.display = 'block';
+        modal.animate([
+            {transform:'scale(0.8) rotateY(30deg)',opacity:0},
+            {transform:'scale(1) rotateY(0deg)',opacity:1}
+        ],{duration:350,fill:'forwards',easing:'cubic-bezier(.68,-0.55,.27,1.55)'});
+    }
+    document.getElementById('modalClose').onclick = closeModal;
+    document.getElementById('modalBg').onclick = closeModal;
+    function closeModal() {
+        document.getElementById('modalBg').style.display = 'none';
+        document.getElementById('modal').style.display = 'none';
+    }
+    </script>
+</body>
+</html>
